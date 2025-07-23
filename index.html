@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor y Tradición - Tu Restaurante Favorito</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Light background */
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #ef4444; /* Red-500 */
+            border-radius: 9999px;
+        }
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #25D366; /* WhatsApp green */
+            color: white;
+            padding: 1rem 1.25rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .whatsapp-button:hover {
+            transform: scale(1.05);
+            background-color: #1DA851;
+        }
+        .menu-item {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .menu-category-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ef4444; /* Red-500 */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .sub-category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4b5563; /* Gray-700 */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+        .submit-button {
+            background-color: #ef4444;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .submit-button:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+        /* Dropdown specific styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            top: 100%; /* Position below the parent link */
+            left: 0;
+        }
+        .dropdown-menu a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+            color: #ef4444;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        /* Mobile dropdown */
+        #mobile-menu .dropdown-menu {
+            position: static; /* Remove absolute positioning for mobile */
+            box-shadow: none;
+            background-color: #f3f4f6; /* Lighter background for mobile submenu */
+            padding-left: 1rem; /* Indent submenu items */
+            border-radius: 0;
+        }
+        #mobile-menu .dropdown-menu a {
+            padding: 8px 16px; /* Adjust padding for mobile */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/521234567890?text=Hola!%20Me%20gustaría%20hacer%20un%20pedido." target="_blank" class="whatsapp-button">
+        <i class="fab fa-whatsapp text-2xl"></i>
+        <span>Pedir por WhatsApp</span>
+    </a>
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 sticky top-0 z-50 rounded-b-xl">
+        <nav class="container mx-auto flex justify-between items-center">
+            <div class="text-3xl font-bold text-red-600">Sabor y Tradición</div>
+            <ul class="hidden md:flex space-x-8">
+                <!-- Menu Dropdown for Desktop -->
+                <li class="relative dropdown">
+                    <a href="#" class="text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300 flex items-center" id="desktop-menu-dropdown-toggle">
+                        Menú <i class="fas fa-chevron-down ml-2 text-sm"></i>
+                    </a>
+                    <div class="dropdown-menu" id="desktop-menu-dropdown">
+                        <a href="#desayunos">Desayunos</a>
+                        <a href="#comidas">Comidas</a>
+                        <a href="#meriendas">Meriendas</a>
+                        <a href="#cenas">Cenas</a>
+                        <a href="#bebidas">Bebidas</a>
+                    </div>
+                </li>
+                <li><a href="#order" class="text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300">Pedido</a></li>
+                <li><a href="#contact" class="text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300">Contacto</a></li>
+            </ul>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden mt-4">
+            <ul class="flex flex-col space-y-4">
+                <!-- Menu Dropdown for Mobile -->
+                <li class="relative">
+                    <button class="block text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300 py-2 px-4 rounded-lg bg-gray-100 w-full text-left flex justify-between items-center" id="mobile-menu-dropdown-toggle">
+                        Menú <i class="fas fa-chevron-down ml-2 text-sm"></i>
+                    </button>
+                    <div class="dropdown-menu hidden" id="mobile-menu-dropdown">
+                        <a href="#desayunos" class="block text-gray-700 hover:text-red-500 font-medium text-base transition duration-300 py-2 px-4 rounded-lg">Desayunos</a>
+                        <a href="#comidas" class="block text-gray-700 hover:text-red-500 font-medium text-base transition duration-300 py-2 px-4 rounded-lg">Comidas</a>
+                        <a href="#meriendas" class="block text-gray-700 hover:text-red-500 font-medium text-base transition duration-300 py-2 px-4 rounded-lg">Meriendas</a>
+                        <a href="#cenas" class="block text-gray-700 hover:text-red-500 font-medium text-base transition duration-300 py-2 px-4 rounded-lg">Cenas</a>
+                        <a href="#bebidas" class="block text-gray-700 hover:text-red-500 font-medium text-base transition duration-300 py-2 px-4 rounded-lg">Bebidas</a>
+                    </div>
+                </li>
+                <li><a href="#order" class="block text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300 py-2 px-4 rounded-lg bg-gray-100">Pedido</a></li>
+                <li><a href="#contact" class="block text-gray-700 hover:text-red-500 font-medium text-lg transition duration-300 py-2 px-4 rounded-lg bg-gray-100">Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-cover bg-center h-[500px] flex items-center justify-center text-white rounded-b-3xl shadow-lg" style="background-image: url('https://placehold.co/1200x500/FF5733/FFFFFF?text=Deliciosos+Platillos');">
+        <div class="absolute inset-0 bg-black opacity-50 rounded-b-3xl"></div>
+        <div class="z-10 text-center p-6">
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg">Sabor que Enamora, Tradición que Perdura</h1>
+            <p class="text-xl md:text-2xl mb-8 drop-shadow-md">Descubre la auténtica cocina en cada bocado.</p>
+            <a href="#menu" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">Ver Nuestro Menú</a>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 px-6 md:px-12 container mx-auto">
+        <h2 class="section-title text-center mb-12">Nuestro Menú</h2>
+
+        <!-- Desayunos -->
+        <div class="mb-16" id="desayunos">
+            <h3 class="menu-category-title">Desayunos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="menu-item">
+                    <!-- Image for Huevos Rancheros -->
+                    <img src="./img/huevosRancheros.jpg" alt="Imagen de Huevos Rancheros" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Huevos Rancheros</h4>
+                        <p class="text-gray-600 mb-4">Dos huevos fritos sobre tortillas de maíz, bañados en salsa roja, acompañados de frijoles refritos.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$85 MXN</span>
+                </div>
+                <div class="menu-item">
+                    <!-- Image for Chilaquiles Verdes -->
+                    <img src="./img/chilaquilesVerdes.jpg" alt="Imagen de Chilaquiles Verdes" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Chilaquiles Verdes</h4>
+                        <p class="text-gray-600 mb-4">Totopos de maíz bañados en salsa verde, con crema, queso y cebolla. Puedes añadir pollo o huevo.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$95 MXN</span>
+                </div>
+                <div class="menu-item">
+                    <!-- Image for Pan Francés con Frutas -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Pan+Frances" alt="Imagen de Pan Francés con Frutas" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Pan Francés con Frutas</h4>
+                        <p class="text-gray-600 mb-4">Rebanadas de pan brioche empapadas en huevo y leche, doradas a la perfección, con frutas de temporada y miel de maple.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$75 MXN</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comidas -->
+        <div class="mb-16" id="comidas">
+            <h3 class="menu-category-title">Comidas</h3>
+            <div class="grid grid-cols-1 gap-8">
+                <!-- Entradas -->
+                <div>
+                    <h4 class="sub-category-title">Entradas</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Sopa Azteca -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Sopa+Azteca" alt="Imagen de Sopa Azteca" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Sopa Azteca</h5>
+                                <p class="text-gray-600 mb-4">Caldo de tortilla con aguacate, chicharrón, queso y crema.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$60 MXN</span>
+                        </div>
+                        <div class="menu-item">
+                            <!-- Image for Guacamole con Totopos -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Guacamole" alt="Imagen de Guacamole con Totopos" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Guacamole con Totopos</h5>
+                                <p class="text-gray-600 mb-4">Aguacate fresco machacado con cebolla, cilantro, tomate y chile serrano.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$70 MXN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plato Fuerte -->
+                <div>
+                    <h4 class="sub-category-title">Plato Fuerte</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Enchiladas Suizas -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Enchiladas+Suizas" alt="Imagen de Enchiladas Suizas" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Enchiladas Suizas</h5>
+                                <p class="text-gray-600 mb-4">Tortillas rellenas de pollo, bañadas en salsa verde cremosa y gratinadas con queso.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$120 MXN</span>
+                        </div>
+                        <div class="menu-item">
+                            <!-- Image for Arrachera con Nopales -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Arrachera" alt="Imagen de Arrachera con Nopales" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Arrachera con Nopales</h5>
+                                <p class="text-gray-600 mb-4">Jugosa arrachera a la parrilla, acompañada de nopales asados y cebollitas cambray.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$180 MXN</span>
+                        </div>
+                        <div class="menu-item">
+                            <!-- Image for Pescado a la Veracruzana -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Pescado+Veracruzana" alt="Imagen de Pescado a la Veracruzana" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Pescado a la Veracruzana</h5>
+                                <p class="text-gray-600 mb-4">Filete de pescado cocinado en salsa de tomate, aceitunas, alcaparras y chiles güeros.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$160 MXN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Postres -->
+                <div>
+                    <h4 class="sub-category-title">Postres</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Flan Napolitano -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Flan+Napolitano" alt="Imagen de Flan Napolitano" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Flan Napolitano</h5>
+                                <p class="text-gray-600 mb-4">Clásico flan cremoso con caramelo.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$55 MXN</span>
+                        </div>
+                        <div class="menu-item">
+                            <!-- Image for Churros con Chocolate -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Churros" alt="Imagen de Churros con Chocolate" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Churros con Chocolate</h5>
+                                <p class="text-gray-600 mb-4">Crujientes churros espolvoreados con azúcar y canela, acompañados de chocolate caliente.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$65 MXN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meriendas -->
+        <div class="mb-16" id="meriendas">
+            <h3 class="menu-category-title">Meriendas</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="menu-item">
+                    <!-- Image for Molletes -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Molletes" alt="Imagen de Molletes" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Molletes</h4>
+                        <p class="text-gray-600 mb-4">Bolillos abiertos con frijoles refritos y queso gratinado, acompañados de pico de gallo.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$70 MXN</span>
+                </div>
+                <div class="menu-item">
+                    <!-- Image for Tacos Dorados de Papa -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Tacos+Dorados" alt="Imagen de Tacos Dorados de Papa" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Tacos Dorados de Papa</h4>
+                        <p class="text-gray-600 mb-4">Tortillas de maíz rellenas de papa, fritas hasta dorar, con lechuga, crema y queso.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$65 MXN</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cenas -->
+        <div class="mb-16" id="cenas">
+            <h3 class="menu-category-title">Cenas</h3>
+            <div class="grid grid-cols-1 gap-8">
+                <!-- Entradas -->
+                <div>
+                    <h4 class="sub-category-title">Entradas</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Queso Fundido con Chorizo -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Queso+Fundido" alt="Imagen de Queso Fundido con Chorizo" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Queso Fundido con Chorizo</h5>
+                                <p class="text-gray-600 mb-4">Delicioso queso derretido con chorizo, servido con tortillas de harina.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$90 MXN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plato Fuerte -->
+                <div>
+                    <h4 class="sub-category-title">Plato Fuerte</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Fajitas de Pollo -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Fajitas+Pollo" alt="Imagen de Fajitas de Pollo" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Fajitas de Pollo</h5>
+                                <p class="text-gray-600 mb-4">Tiras de pollo a la parrilla con pimientos y cebolla, servidas en sartén caliente con tortillas.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$140 MXN</span>
+                        </div>
+                        <div class="menu-item">
+                            <!-- Image for Tacos al Pastor -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Tacos+Pastor" alt="Imagen de Tacos al Pastor" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Tacos al Pastor</h5>
+                                <p class="text-gray-600 mb-4">Tacos de carne de cerdo marinada y asada, con piña, cebolla y cilantro.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$100 MXN (4 tacos)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Postres -->
+                <div>
+                    <h4 class="sub-category-title">Postres</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="menu-item">
+                            <!-- Image for Pastel de Elote -->
+                            <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Pastel+Elote" alt="Imagen de Pastel de Elote" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div>
+                                <h5 class="text-xl font-semibold text-gray-900 mb-2">Pastel de Elote</h5>
+                                <p class="text-gray-600 mb-4">Pastel tradicional de elote, suave y dulce.</p>
+                            </div>
+                            <span class="text-red-600 font-bold text-lg mt-auto">$60 MXN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bebidas -->
+        <div class="mb-16" id="bebidas">
+            <h3 class="menu-category-title">Bebidas</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="menu-item">
+                    <!-- Image for Aguas Frescas -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Aguas+Frescas" alt="Imagen de Aguas Frescas" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Aguas Frescas</h4>
+                        <p class="text-gray-600 mb-4">Horchata, Jamaica, Tamarindo.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$35 MXN</span>
+                </div>
+                <div class="menu-item">
+                    <!-- Image for Refrescos -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Refrescos" alt="Imagen de Refrescos" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Refrescos</h4>
+                        <p class="text-gray-600 mb-4">Coca-Cola, Sprite, Fanta.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$30 MXN</span>
+                </div>
+                <div class="menu-item">
+                    <!-- Image for Café Americano -->
+                    <img src="https://placehold.co/300x200/FEE2E2/EF4444?text=Cafe+Americano" alt="Imagen de Café Americano" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Café Americano</h4>
+                        <p class="text-gray-600 mb-4">Café recién hecho.</p>
+                    </div>
+                    <span class="text-red-600 font-bold text-lg mt-auto">$40 MXN</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section id="order" class="py-16 px-6 md:px-12 bg-red-50 rounded-t-3xl shadow-inner">
+        <div class="container mx-auto max-w-2xl">
+            <h2 class="section-title text-center mb-12">Haz Tu Pedido</h2>
+            <form id="orderForm" class="bg-white p-8 rounded-2xl shadow-xl space-y-6">
+                <div>
+                    <label for="name" class="block text-gray-700 text-lg font-medium mb-2">Nombre Completo</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Tu nombre" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 text-lg font-medium mb-2">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="tu.correo@ejemplo.com">
+                </div>
+                <div>
+                    <label for="phone" class="block text-gray-700 text-lg font-medium mb-2">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="Ej: 55 1234 5678" required>
+                </div>
+                <div>
+                    <label for="address" class="block text-gray-700 text-lg font-medium mb-2">Dirección de Envío</label>
+                    <textarea id="address" name="address" rows="3" class="form-input" placeholder="Calle, número, colonia, código postal" required></textarea>
+                </div>
+                <div>
+                    <label for="order-details" class="block text-gray-700 text-lg font-medium mb-2">Detalles de Tu Pedido</label>
+                    <textarea id="order-details" name="order-details" rows="5" class="form-input" placeholder="Ej: 1 Huevos Rancheros, 2 Tacos al Pastor, 1 Agua de Horchata. Especifica cualquier detalle o preferencia." required></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="submit-button">Enviar Pedido por WhatsApp</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 px-6 md:px-12 bg-gray-800 text-white rounded-t-3xl">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8">Contáctanos</h2>
+            <p class="text-lg mb-4">Estamos ubicados en: Calle Ficticia #123, Colonia Centro, Ciudad Ejemplo.</p>
+            <p class="text-lg mb-4">Teléfono: <a href="tel:+521234567890" class="text-red-400 hover:underline">+52 123 456 7890</a></p>
+            <p class="text-lg mb-8">Email: <a href="mailto:info@saborytradicion.com" class="text-red-400 hover:underline">info@saborytradicion.com</a></p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-red-400 hover:text-red-200 text-3xl transition duration-300"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-red-400 hover:text-red-200 text-3xl transition duration-300"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-red-400 hover:text-red-200 text-3xl transition duration-300"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center rounded-t-xl">
+        <p>&copy; 2024 Sabor y Tradición. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+
+                // Close any open dropdowns
+                const openDropdowns = document.querySelectorAll('.dropdown-menu:not(.hidden)');
+                openDropdowns.forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            // Ensure mobile dropdown is hidden when main menu is toggled
+            document.getElementById('mobile-menu-dropdown').classList.add('hidden');
+        });
+
+        // Desktop Menu Dropdown Toggle (using hover for desktop, click for mobile)
+        const desktopMenuDropdownToggle = document.getElementById('desktop-menu-dropdown-toggle');
+        const desktopMenuDropdown = document.getElementById('desktop-menu-dropdown');
+
+        // For desktop, we'll use CSS hover for simplicity, but keep JS for click toggle on touch devices
+        if (window.innerWidth >= 768) { // md breakpoint in Tailwind
+            desktopMenuDropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                desktopMenuDropdown.classList.toggle('hidden');
+            });
+        }
+
+        // Mobile Menu Dropdown Toggle
+        const mobileMenuDropdownToggle = document.getElementById('mobile-menu-dropdown-toggle');
+        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
+
+        mobileMenuDropdownToggle.addEventListener('click', () => {
+            mobileMenuDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            // Desktop dropdown
+            if (desktopMenuDropdown && !desktopMenuDropdownToggle.contains(e.target) && !desktopMenuDropdown.contains(e.target)) {
+                desktopMenuDropdown.classList.add('hidden');
+            }
+            // Mobile dropdown (only if mobile menu is open)
+            if (mobileMenu && !mobileMenu.classList.contains('hidden') && mobileMenuDropdown && !mobileMenuDropdownToggle.contains(e.target) && !mobileMenuDropdown.contains(e.target)) {
+                mobileMenuDropdown.classList.add('hidden');
+            }
+        });
+
+        // WhatsApp form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const orderDetails = document.getElementById('order-details').value;
+
+            // Construct the WhatsApp message
+            let message = `¡Hola! Me gustaría hacer un pedido con los siguientes detalles:%0A`;
+            message += `*Nombre:* ${name}%0A`;
+            if (email) {
+                message += `*Email:* ${email}%0A`;
+            }
+            message += `*Teléfono:* ${phone}%0A`;
+            message += `*Dirección:* ${address}%0A`;
+            message += `*Pedido:*%0A${orderDetails}%0A`;
+            message += `%0A¡Gracias!`;
+
+            // WhatsApp phone number (replace with your actual number, including country code)
+            const whatsappNumber = '521234567890'; // Example: +52 for Mexico, 1 for mobile, then the number
+
+            // Construct the WhatsApp URL
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Optionally, clear the form after submission
+            this.reset();
+        });
+    </script>
+</body>
+</html>
